@@ -9,13 +9,14 @@ class Video(object):
     def __del__(self):
         self.video.release()
     def get_frame(self):
-        ret,frame=self.video.read()
-        video = cv2.VideoCapture(0)
+        # capture the frame
+        video=cv2.VideoCapture(0)
         faceDetector = dlib.get_frontal_face_detector()
         # print(frame)
         while True:
-            # capture the frame
+            
             # check, frame = video.read()
+            ret,frame=self.video.read()
             # flip the frame captured like a mirror image
             frame = cv2.flip(frame, 1)
             # convert the frame into gray scale image (optional)
