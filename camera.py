@@ -13,7 +13,7 @@ class Video(object):
         faceDetector = dlib.get_frontal_face_detector()
         # print(frame)
         while True:
-            video = cv2.VideoCapture(1)
+            video = cv2.VideoCapture(-1)
             # check, frame = video.read()
             ret, frame = self.video.read()
             # flip the frame captured like a mirror image
