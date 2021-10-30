@@ -16,7 +16,7 @@ class Video(object):
         while True:
             
             # check, frame = video.read()
-            ret,frame = video.read()
+            ret, frame = self.video.read()
             # flip the frame captured like a mirror image
             frame = cv2.flip(frame, 1)
             # convert the frame into gray scale image (optional)
