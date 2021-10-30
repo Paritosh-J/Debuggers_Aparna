@@ -4,10 +4,10 @@ import cv2, dlib
 faceDetect=cv2.CascadeClassifier('haarcascade_frontalface_default.xml')
 
 class Video(object):
-    def __init__(self):
-        self.video=cv2.VideoCapture(0)
-    def __del__(self):
-        self.video.release()
+    #def __init__(self):
+        #self.video=cv2.VideoCapture(0)
+    #def __del__(self):
+        #self.video.release()
     def get_frame(self):
         # capture the frame
         video=cv2.VideoCapture(0)
@@ -16,7 +16,7 @@ class Video(object):
         while True:
             
             # check, frame = video.read()
-            ret,frame=self.video.read()
+            ret,frame = video.read()
             # flip the frame captured like a mirror image
             frame = cv2.flip(frame, 1)
             # convert the frame into gray scale image (optional)
