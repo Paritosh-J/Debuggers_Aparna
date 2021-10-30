@@ -1,66 +1,34 @@
-import cv2, dlib, time
+import cv2
 
-def captureVid():
-    # live cam face detection
-    faceCascade = cv2.CascadeClassifier('haarcascade_frontalface_default.xml')
+# faceDetect=cv2.CascadeClassifier('haarcascade_frontalface_default.xml')
+faceCascade = cv2.CascadeClassifier("haarcascade_frontalface_default.xml")
 
-    # capture video
-    video = cv2.VideoCapture(0)
+class Video(object):
+    def get_frame(self):
+         # face detector initialized   
+        faceCascade = cv2.CascadeClassifier("haarcascade_frontalface_default.xml")
+        # get/read the image
+        img = cv2.imread('faces.jpg', 1)
+        # print(img)  # check if image read successfully
 
-    # detect face with dlib's face detector method
-    faceDetector = dlib.get_frontal_face_detector()
-    while True:
-        # capture the frame
-        check, frame = video.read()
-        # flip the frame captured like a mirror image
-        frame = cv2.flip(frame, 1)
-        # convert the frame into gray scale image (optional)
-        grayImg = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-        # detect face
-        face = faceDetector(grayImg)
-        # variable with intial count for no. of faces = 0
+        # detect face by decreasing the scaleFactor by 1.05
+        faces = faceCascade.detectMultiScale(img, scaleFactor=1.05, minNeighbors=5)
+
+        # initial no. of faces = 0
         count = 0
-        # flag for face limit warning
-        flag = 0
-
-        for f in face:
-            # checking face limit
-            if count == 1:
-                cv2.putText(frame, "WARNING! Max limit reached", (100, 70), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 255), 4)
-                flag = 1
-
-            if count > 1:  # if more than 3 persons in 2 wheeler vehicle
-                # function call to capture the snap of 3 or more faces
-                cv2.putText(frame, "ALERT! Defaulter Found", (100, 70), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 255), 4)
-
-            # coordinates for drawing rectangle around face
-            x, y = f.left(), f.top()
-            a, b = f.right(), f.bottom()
-
-            # draw rectangle around the face
-            if flag == 1: # max faces detected
-                cv2.rectangle(frame, (x, y), (a, b), (0, 255, 255), 2)  
-            else:
-                cv2.rectangle(frame, (x, y), (a, b), (255, 0, 0), 2)  
-
+        # draw a rectangle around the detected face
+        for (x, y, w, h) in faces:
+            # draw rectangle around face
+            img = cv2.rectangle(img, (x, y), (x + w, y + h), (255, 0, 0), 2)
             # increment face count upon detection
             count += 1
-
             # print text on screen (Face No. : )
-            cv2.putText(frame, "Face No." + str(count), (x-10, y-10), cv2.FONT_HERSHEY_PLAIN, 1, (0, 255, 0), 2) # color format : BGR
-        
-        # display exit key on p/p window
-        cv2.putText(frame, "Press 'Q' to exit", (25, 450), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 230), 2)
+            cv2.putText(img, "Face No." + str(count), (x-10, y-10), cv2.FONT_HERSHEY_PLAIN, 1, (0, 255, 0), 2) # color format : BGR
+
+        cv2.putText(img, "Total Faces Detected : " + str(count), (45, 400), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), 2)
+
         # open window for showing the o/p
-        cv2.imshow('=== Live Cam ===', frame)
-        
-        # escape key (q)
-        if cv2.waitKey(1) == ord('q'):
-            break
+        cv2.imshow('pic', img)
 
-    video.release()
-    cv2.destroyAllWindows()
-
-
-if __name__ == '__main__':
-    captureVid()
+        cv2.waitKey(0)
+        cv2.destroyAllWindows()
